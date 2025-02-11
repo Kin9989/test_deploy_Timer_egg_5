@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bộ đếm thời gian luộc trứng chính xác - Tự động báo khi trứng chín đúng độ theo yêu cầu">
+    <meta name="keywords" content="timer luộc trứng, egg timer, đồng hồ đếm ngược, hẹn giờ nấu ăn">
+    <meta name="author" content="Your Name">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-domain.com/timer.html">
+    <meta property="og:title" content="Timer luộc trứng - Đồng hồ đếm ngược chính xác">
+    <meta property="og:description" content="Bộ đếm thời gian luộc trứng chính xác - Tự động báo khi trứng chín">
+    <meta property="og:image" content="https://your-domain.com/path-to-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://your-domain.com/timer.html">
+    <meta property="twitter:title" content="Timer luộc trứng - Đồng hồ đếm ngược chính xác">
+    <meta property="twitter:description" content="Bộ đếm thời gian luộc trứng chính xác">
+    <meta property="twitter:image" content="https://your-domain.com/path-to-image.jpg">
+
+    <!-- Thẻ meta động cho từng loại trứng -->
+    <meta id="dynamicDescription" name="description" content="">
+    <title>Egg Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #e0e0e0;
+        }
+
+        .timer-container {
+            width: 350px;
+            padding: 40px;
+            border-radius: 50px;
+            background: #e0e0e0;
+            box-shadow: 20px 20px 60px #bebebe,
+                       -20px -20px 60px #ffffff;
+            text-align: center;
+        }
+
+        .timer-display {
+            font-size: 82px;
+            font-weight: bold;
+            margin: 30px 0;
+            color: #323232;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer-title {
+            font-size: 28px;
+            color: #444;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .timer-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 0.1em 0.25em;
+            width: 13em;
+            height: 4.2em;
+            background-color: #212121;
+            border: 0.08em solid #fff;
+            border-radius: 0.3em;
+            font-size: 12px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        button span {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            bottom: 0.4em;
+            width: 8.25em;
+            height: 2.5em;
+            background-color: #212121;
+            border-radius: 0.2em;
+            font-size: 1.5em;
+            color: #fff;
+            border: 0.08em solid #fff;
+            box-shadow: 0 0.4em 0.1em 0.019em #fff;
+        }
+
+        button span:hover {
+            transition: all 0.5s;
+            transform: translate(0, 0.4em);
+            box-shadow: 0 0 0 0 #fff;
+        }
+
+        button span:not(hover) {
+            transition: all 1s;
+        }
+
+        .start-btn span {
+            background-color: #4CAF50;
+        }
+
+        .reset-btn span {
+            background-color: #f44336;
+        }
+
+        .back-btn span {
+            background-color: #2196F3;
+        }
+
+        .back-btn {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer-container">
+        <div class="timer-title" id="timerTitle"></div>
+        <div class="timer-display" id="timer">00:00</div>
+        <div class="timer-buttons">
+            <button class="start-btn" onclick="startTimer()">
+                <span>Bắt đầu</span>
+            </button>
+            <button class="reset-btn" onclick="resetTimer()">
+                <span>Đặt lại</span>
+            </button>
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <span>Quay lại</span>
+            </button>
+        </div>
+    </div>
+
+    <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+
+    <script>
+        // Cấu hình cho các loại trứng
+        const eggTypes = {
+            'longdao': {
+                title: 'Trứng Lòng Đào - 3 phút',
+                time: 180
+            },
+            'chay': {
+                title: 'Trứng Chảy - 4 phút',
+                time: 240
+            },
+            'gia': {
+                title: 'Trứng Già - 6 phút',
+                time: 360
+            },
+            'chinky': {
+                title: 'Trứng Chín Kỹ - 8 phút',
+                time: 480
+            }
+        };
+
+        // Lấy loại trứng từ URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const eggType = urlParams.get('type') || 'longdao';
+        const eggConfig = eggTypes[eggType];
+
+        // Cập nhật tiêu đề và thời gian
+        document.getElementById('timerTitle').textContent = eggConfig.title;
+        document.title = `Timer - ${eggConfig.title}`;
+
+        const INITIAL_TIME = eggConfig.time;
+        let timeLeft = INITIAL_TIME;
+        let timerId = null;
+        const timerDisplay = document.getElementById('timer');
+        const alarmSound = document.getElementById('alarmSound');
+        
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (timeLeft <= 0) {
+                resetTimer();
+            }
+            
+            if (timerId === null) {
+                timerId = setInterval(() => {
+                    timeLeft--;
+                    updateDisplay();
+                    if (timeLeft <= 0) {
+                        clearInterval(timerId);
+                        timerId = null;
+                        alarmSound.play();
+                        alert('Trứng đã chín!');
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerId);
+            timerId = null;
+            timeLeft = INITIAL_TIME;
+            updateDisplay();
+        }
+
+        updateDisplay();
+
+        // Thêm vào phần script sau khi đã lấy eggConfig
+        document.getElementById('dynamicDescription').setAttribute(
+            'content', 
+            `Hẹn giờ luộc ${eggConfig.title} - Đếm ngược ${eggConfig.time/60} phút để có món trứng hoàn hảo`
+        );
+    </script>
+</body>
+</html> 
