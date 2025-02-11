@@ -1,0 +1,192 @@
+.form-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.form {
+    --input-focus: #2d8cf0;
+    --font-color: #323232;
+    --font-color-sub: #666;
+    --bg-color: beige;
+    --main-color: black;
+    padding: 30px;
+    background: linear-gradient(to bottom right, #87CEEB, #ADD8E6);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    border-radius: 15px;
+    border: 3px solid var(--main-color);
+    box-shadow: 8px 8px var(--main-color);
+    width: 500px;
+}
+
+.title {
+    color: var(--main-color);
+    font-weight: 900;
+    font-size: 32px;
+    margin-bottom: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.title span {
+    color: var(--font-color-sub);
+    font-weight: 700;
+    font-size: 24px;
+    display: block;
+    margin-top: 8px;
+}
+
+.egg-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 15px;
+}
+
+.egg-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 15px;
+    border: 3px solid transparent;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.egg-option:hover {
+    /* Xóa các thuộc tính hover cũ */
+}
+
+.egg-option img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.egg-option span {
+    color: var(--font-color);
+    font-weight: 700;
+    font-size: 20px;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.button-log {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    border: 2px solid var(--main-color);
+    background-color: var(--bg-color);
+    box-shadow: 4px 4px var(--main-color);
+    color: var(--font-color);
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    fill: var(--main-color);
+}
+
+.button-confirm {
+    margin: 25px auto 0 auto;
+    width: 180px;
+    height: 50px;
+    border-radius: 25px;
+    border: 3px solid var(--main-color);
+    background-color: var(--bg-color);
+    box-shadow: 4px 4px var(--main-color);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--font-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.button-confirm:hover {
+    background-color: var(--main-color);
+    color: var(--bg-color);
+}
+
+.button-confirm:active {
+    box-shadow: 0px 0px var(--main-color);
+    transform: translate(3px, 3px);
+}
+
+.egg-option.selected {
+    border-color: var(--main-color);
+    background-color: var(--bg-color);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Thêm media queries cho responsive */
+@media (max-width: 600px) {
+    .form {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 28px;
+    }
+
+    .title span {
+        font-size: 20px;
+    }
+
+    .egg-option img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .egg-option span {
+        font-size: 18px;
+    }
+
+    .button-confirm {
+        width: 150px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
+
+/* Thêm style cho egg-link */
+.egg-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* Di chuyển hiệu ứng hover từ egg-option sang egg-link */
+.egg-link:hover .egg-option {
+    border-color: var(--main-color);
+    background-color: var(--bg-color);
+    transform: translateY(-5px);
+}
+
+/* Xóa hover cũ của egg-option nếu có */
+.egg-option:hover {
+    /* Xóa các thuộc tính hover cũ */
+}
+  
